@@ -1,0 +1,70 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: black; color:white">
+        
+    {% if request.resolver_match.url_name == "user_list" %}
+        <h1>User List</h1>
+        
+        <table border="1px">
+            <thead>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Delete</th>
+                <th>Update</th>
+            </thead>
+            <tbody>
+                {% for user in object_list %}
+                    <tr>
+                        <td>{{user.first_name}}</td>
+                        <td>{{user.last_name}}</td>
+                        <td>{{user.email}}</td>
+                        <td>
+                            <form action="{% url 'users:user_update' pk=user.id %}" method="POST">
+                                {% csrf_token %}
+                                <input type="submit" value="Update">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{% url 'users:user_delete' pk=user.id %}" method="POST">
+                                {% csrf_token %}
+                                <input type="submit" value="Delete">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h1>User Create Form</h1>
+        <form action="{% url 'users:user_create' %}" method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" value="Submit">
+        </form>
+
+    {% else %}
+
+        <h1>User Update Form</h1>
+        <form action="{% url 'users:user_update' pk=user.id %}" method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" value="Submit">
+        </form>
+        <script>
+            document.getElementById("id_email").value = "{{object.email}}"
+            document.getElementById("id_first_name").value = "{{object.first_name}}"
+            document.getElementById("id_last_name").value = "{{object.last_name}}"
+        </script>
+
+    {% endif %}
+
+        
+</body>
+</html>
