@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body style="background-color: black; color:white">
-        
+    
     {% if request.resolver_match.url_name == "user_list" %}
         <h1>User List</h1>
         
@@ -41,6 +41,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        
+        <h1><a style="color: white;" href="{% url 'users:user_create' %}">Add User</a></h1>
+    {% elif request.resolver_match.url_name == "user_create" %}
 
         <h1>User Create Form</h1>
         <form action="{% url 'users:user_create' %}" method="POST">
